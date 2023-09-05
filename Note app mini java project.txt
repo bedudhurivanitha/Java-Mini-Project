@@ -1,0 +1,149 @@
+import java.io.*;
+import java.util.*;
+
+class Note {
+    private String title;
+    private String content;
+
+    public Note(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+}
+
+class NoteTakingApp {
+    private List<Note> notes;
+    private Scanner scanner;
+
+    public NoteTakingApp() {
+        notes = new ArrayList<>();
+        scanner = new Scanner(System.in);
+    }
+
+    public void displayMenu() {
+        System.out.println("Note Taking App Menu:");
+        System.out.println("1. Create a New Note");
+        System.out.println("2. View All Notes");
+        System.out.println("3. View a Note");
+        System.out.println("4. Edit a Note");
+        System.out.println("5. Delete a Note");
+        System.out.println("6. Exit");
+    }
+
+    public void createNote() {
+        System.out.print("Enter note title: ");
+        String title = scanner.nextLine();
+        System.out.print("Enter note content: ");
+        String content = scanner.nextLine();
+        Note note = new Note(title, content);
+        notes.add(note);
+        System.out.println("Note created successfully.");
+    }
+
+    public void viewAllNotes() {
+        if (notes.isEmpty()) {
+            System.out.println("No notes available.");
+            return;
+        }
+        System.out.println("All Notes:");
+        for (int i = 0; i < notes.size(); i++) {
+            System.out.println((i + 1) + ". " + notes.get(i).getTitle());
+        }
+    }
+
+    public void viewNote() {
+        viewAllNotes();
+        System.out.print("Enter the note number to view: ");
+        int noteNumber = scanner.nextInt();
+        scanner.nextLine(); // Consume the newline character
+        if (noteNumber >= 1 && noteNumber <= notes.size()) {
+            Note note = notes.get(noteNumber - 1);
+            System.out.println("Title: " + note.getTitle());
+            System.out.println("Content: " + note.getContent());
+        } else {
+            System.out.println("Invalid note number.");
+        }
+    }
+
+    public void editNote() {
+        viewAllNotes();
+        System.out.print("Enter the note number to edit: ");
+        int noteNumber = scanner.nextInt();
+        scanner.nextLine(); // Consume the newline character
+        if (noteNumber >= 1 && noteNumber <= notes.size()) {
+            Note note = notes.get(noteNumber - 1);
+            System.out.print("Enter new content: ");
+            String newContent = scanner.nextLine();
+            note.setContent(newContent);
+            System.out.println("Note edited successfully.");
+        } else {
+            System.out.println("Invalid note number.");
+        }
+    }
+
+    public void deleteNote() {
+        viewAllNotes();
+        System.out.print("Enter the note number to delete: ");
+        int noteNumber = scanner.nextInt();
+        scanner.nextLine(); // Consume the newline character
+        if (noteNumber >= 1 && noteNumber <= notes.size()) {
+            notes.remove(noteNumber - 1);
+            System.out.println("Note deleted successfully.");
+        } else {
+            System.out.println("Invalid note number.");
+        }
+    }
+
+    public void run() {
+        int choice;
+        do {
+            displayMenu();
+            System.out.print("Enter your choice: ");
+            choice = scanner.nextInt();
+            scanner.nextLine(); // Consume the newline character
+            switch (choice) {
+                case 1:
+                    createNote();
+                    break;
+                case 2:
+                    viewAllNotes();
+                    break;
+                case 3:
+                    viewNote();
+                    break;
+                case 4:
+                    editNote();
+                    break;
+                case 5:
+                    deleteNote();
+                    break;
+                case 6:
+                    System.out.println("Exiting Note Taking App. Goodbye!");
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        } while (choice != 6);
+        scanner.close();
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        NoteTakingApp noteTakingApp = new NoteTakingApp();
+        noteTakingApp.run();
+    }
+}
+
